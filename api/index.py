@@ -7,9 +7,9 @@ from PyPDF2 import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 
 # create the flask app instance (instance name must be 'application' for deploying to beanstalk)
-application = Flask(__name__) 
+app = Flask(__name__) 
 
-CORS(application)
+CORS(app)
 
 def get_page_sizes(pdf_reader):
     page_sizes = []
@@ -104,7 +104,7 @@ def _split_pdf(file_path, part_size_mb, output_dir):
     return total_pages == total_pages_sum_after
 
 # Split pdf end point
-@application.route('/api/split', methods=['POST'])
+@app.route('/api/split', methods=['POST'])
 def split_pdf():
     """Get 'pdf_file' and'max_size' from the request and split the pdf file"""
 
@@ -173,7 +173,7 @@ def split_pdf():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@application.route('/tmp', methods=['GET'])
+@app.route('/tmp', methods=['GET'])
 def single_text():
     res = {
         'message': 'Message from the server',
@@ -183,4 +183,4 @@ def single_text():
     return jsonify(res)
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    app.run(debug=True)
